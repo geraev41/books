@@ -15,7 +15,7 @@ namespace GraphQLBookstore.Repositories
             _context = context;
         }
 
-        public IEnumerable<Book> All(ResolveFieldContext<object> context){
+        public IEnumerable<Book> All(ResolveFieldContext<object> context, bool order){
             var results = from books in _context.Books select books;
             if (context.HasArgument("name"))
             {
@@ -37,7 +37,7 @@ namespace GraphQLBookstore.Repositories
                 var value = context.GetArgument<long>("authorId");
                 results = results.Where(a => a.AuthorId == value);
             }
-            results =  results.OrderBy(x => x.Name); 
+            results =  order?results.OrderBy(x => x.Name): results; 
             return PaginatedList<Book>.Paginate(results, context);
         }
 

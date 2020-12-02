@@ -28,15 +28,15 @@
     <div class="card-body">
         <div class="form-row">
             <div class="form-group col-md-10">
-                <input type="search" class="form-control" autofocus placeholder="Filter by name here..." [(ngModel)]="name_filter">
+                <input type="search" class="form-control" on="filter(false)" autofocus placeholder="Filter by name here..." [(ngModel)]="name_filter">
             </div>
             <div class="form-group col-md-2">
-                <button class="btn btn-primary" (click)="filter()">Filter</button>
+                <button class="btn btn-primary" (click)="filter(false)">Filter</button>
             </div>
         </div>
     </div>
 </div>
-<button class="btn btn-primary" (click)="filter()">Ascendente</button>
+<button class="btn btn-primary" (click)="filter(true)">Ascendente</button>
 <table class="table">
     <tr>
         <th>Id</th>

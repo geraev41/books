@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const BOOKS_QUERY = gql`
-   query books($name: String, $description: String){
-        books(name: $name, description : $description){
+   query books($name: String, $order : Boolean){
+        books(name: $name, order : $order){
             id
             name
             description

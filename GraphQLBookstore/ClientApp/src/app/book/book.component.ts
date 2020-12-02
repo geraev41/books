@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import {BOOKS_QUERY} from './queries';
 import {Book} from './book.interface';
 import { CREATE_BOOK,DELETE_BOOK, UPDATE_BOOK} from './mutatios';
+import { variable } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
@@ -16,13 +17,15 @@ export class BookComponent implements OnInit {
   private book: Book; 
   private  is_editting = false;
   private name_filter = '';
+
   constructor(private apollo: Apollo) {
-    this.filter(); 
+    this.filter(false); 
     this.newBook(); 
    }
 
   ngOnInit(): void {
   }
+  
 newBook(){
   this.book = {
     id :0,
@@ -44,17 +47,18 @@ newBook(){
       mutation: CREATE_BOOK,
       variables: variables
     }).subscribe(() => {
-      this.filter();
+      this.filter(false);
       this.newBook(); 
+      this.is_editting = false; 
     });
   }
 
-  filter() {
+  filter(isOrder: Boolean) {
     this.apollo.watchQuery({
       query:  BOOKS_QUERY,
       fetchPolicy: 'network-only',
       variables: {
-        name: this.name_filter
+        name: this.name_filter, order: isOrder
       }
     }).valueChanges.subscribe(result => {
       this.books = result.data.books;
@@ -67,10 +71,9 @@ newBook(){
       variables: { id: b.id }
     }).subscribe(() => {
       this.is_editting = false;
-      this.filter();
+      this.filter(false);
     });
   }
-
   edit(b: Book){
     this.is_editting = true;
     this.book = {...b};
@@ -84,7 +87,7 @@ newBook(){
       mutation: UPDATE_BOOK,
       variables: variables
     }).subscribe(() => {
-      this.filter();
+      this.filter(false);
       this.newBook(); 
     });
 

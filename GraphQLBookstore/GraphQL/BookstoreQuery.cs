@@ -30,11 +30,12 @@ namespace  GraphQLBookstore.GraphQL {
                                                  new QueryArgument<IntGraphType> { Name = "authorId" },
                                                  new QueryArgument<IntGraphType> { Name = "page", DefaultValue = 1 },
                                                  new QueryArgument<IntGraphType> { Name = "pageSize", DefaultValue = 12 },
-                                                 new QueryArgument<IntGraphType> { Name = "order" }
+                                                 new QueryArgument<BooleanGraphType> { Name = "order" }
 
                                              ),
                                              resolve: context => {
-                                                 return bookRepository.All(context);
+                                                 var order = context.GetArgument<bool>("order"); 
+                                                 return bookRepository.All(context, order);
                                              });
             Field<BookType>("book",
                               arguments: new QueryArguments(new QueryArgument<IdGraphType> { Name = "id" }),
